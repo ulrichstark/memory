@@ -30,7 +30,7 @@ main, #settings-dialog-wrapper, #settings-dialog {
 }
 
 main {
-	transform: translateX(100%);
+	transform: translateX(-100%);
 }
 
 body.ingame main {
