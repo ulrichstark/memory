@@ -7,6 +7,7 @@ body {
 	font-family: "Comic Sans MS", cursive;
 	font-size: 20px;
 	background-color: #ddd;
+	overflow: hidden;
 }
 
 h1 {
@@ -24,13 +25,26 @@ ul {
 	margin: 0;
 }
 
+main, #settings-dialog-wrapper, #settings-dialog {
+	transition: all 1s;
+}
+
+main {
+	transform: translateX(100%);
+}
+
+body.ingame main {
+	transform: none;
+}
+
 #settings-dialog-wrapper {
 	position: fixed;
 	left: 0;
 	right: 0;
 	bottom: 0;
 	top: 0;
-	background-color: rgba(0, 0, 0, 0.2);
+	z-index: 10;
+	background-color: rgba(0, 0, 0, 0.3);
 }
 
 #settings-dialog {
@@ -44,9 +58,22 @@ ul {
 	width: 500px;
 	max-width: 90%;
 	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-	text-align: center;
 	
-	height: 500px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	
+	padding: 24px;
+}
+
+body.ingame #settings-dialog {
+	top: 0;
+	transform: translate(-50%, -120%);
+}
+
+body.ingame #settings-dialog-wrapper {
+	background-color: transparent;
+	pointer-events: none;
 }
 
 button {
@@ -59,6 +86,8 @@ button {
 	font-size: 1.2em;
 	transition: all 0.4s;
 	box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+	padding: 8px 16px;
+	border-radius: 8px;
 }
 
 button:hover {
@@ -85,6 +114,7 @@ button.round {
 #settings-players {
 	position: relative;
 	width: 100%;
+	height: 0;
 	transition: height 0.4s;
 	margin-bottom: 16px;
 }
@@ -111,4 +141,9 @@ input {
 
 input:focus {
 	border-color: #59f;
+}
+
+#start-game {
+	align-self: flex-end;
+	margin-top: 48px;
 }

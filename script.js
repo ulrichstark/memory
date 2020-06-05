@@ -1,13 +1,19 @@
 const maxPlayerCount = 4;
 
 let players = [];
+let ingame = false;
 
 const settingsPlayers = document.getElementById("settings-players");
 const settingsAddPlayer = document.getElementById("settings-add-player");
 settingsAddPlayer.addEventListener("click", addPlayer);
 
-renderPlayerListInSettings();
-setTimeout(addPlayer, 100);
+const resetGameButton = document.getElementById("reset-game");
+resetGameButton.addEventListener("click", resetGame);
+
+const startGameButton = document.getElementById("start-game");
+startGameButton.addEventListener("click", startGame);
+
+addPlayer();
 
 function createPlayer() {
 	const elementSettings = document.createElement("li");
@@ -59,6 +65,10 @@ function addPlayer() {
 }
 
 function removePlayer(player) {
+	if (players.length === 1) {
+		// Letzter Spieler darf nicht gelöscht werden!
+		return;
+	}
 	// zu löschenden Spieler aus der Liste filtern
 	players = players.filter(otherPlayer => otherPlayer !== player);
 	
@@ -89,4 +99,19 @@ function renderPlayerListInSettings() {
 	}
 	
 	settingsPlayers.style.height = `${offsetY}px`;
+}
+
+function setIngame(target) {
+	if (target !== ingame) {
+		document.body.classList.toggle("ingame");
+		ingame = target;
+	}
+}
+
+function resetGame() {
+	setIngame(false);
+}
+
+function startGame() {
+	setIngame(true);
 }
