@@ -6,7 +6,7 @@ html, body {
 body {
 	font-family: "Comic Sans MS", cursive;
 	font-size: 20px;
-	background-color: #ddd;
+	background-color: #e0e0e0;
 	overflow: hidden;
 }
 
@@ -30,6 +30,7 @@ main, #settings-dialog-wrapper, #settings-dialog {
 }
 
 main {
+	padding: 24px;
 	transform: translateX(-100%);
 }
 
@@ -80,7 +81,7 @@ button {
 	display: inline-block;
 	cursor: pointer;
 	outline: none;
-	background: #57f;
+	background-color: #555;
 	color: white;
 	border: none;
 	font-size: 1.2em;
@@ -100,6 +101,7 @@ button:active {
 }
 
 button.round {
+	margin: 10px;
 	padding: 8px;
 	width: 40px;
 	height: 40px;
@@ -116,7 +118,6 @@ button.round {
 	width: 100%;
 	height: 0;
 	transition: height 0.4s;
-	margin-bottom: 16px;
 }
 
 .settings-player {
@@ -129,6 +130,12 @@ button.round {
 	justify-content: center;
 }
 
+#settings-pairs {
+	margin-top: 24px;
+	display: flex;
+	align-items: center;
+}
+
 input {
 	border: solid #777 2px;
 	border-radius: 8px;
@@ -136,7 +143,6 @@ input {
 	font-size: 1em;
 	transition: all 0.4s;
 	padding: 8px;
-	margin-right: 10px;
 }
 
 input:focus {
@@ -146,4 +152,23 @@ input:focus {
 #start-game {
 	align-self: flex-end;
 	margin-top: 48px;
+}
+
+#start-game, #reset-game {
+	background-color: #57f;
+}
+
+#board {
+	width: 600px;
+	max-width: 90%;
+	margin: 24px auto;
+	display: grid;
+	grid-gap: 16px;
+}
+
+#board div {
+	background: #eee;
+	border-radius: 8px;
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+	padding-bottom: 100%;
 }

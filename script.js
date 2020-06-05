@@ -1,7 +1,10 @@
 const maxPlayerCount = 4;
+const minPairs = 5;
+const maxPairs = 25;
 
 let players = [];
 let ingame = false;
+let pairs = 12;
 
 const settingsPlayers = document.getElementById("settings-players");
 const settingsAddPlayer = document.getElementById("settings-add-player");
@@ -13,6 +16,14 @@ resetGameButton.addEventListener("click", resetGame);
 const startGameButton = document.getElementById("start-game");
 startGameButton.addEventListener("click", startGame);
 
+const elementPairs = document.getElementById("pairs");
+
+document.getElementById("settings-remove-pair").addEventListener("click", () => changePairs(-1));
+document.getElementById("settings-add-pair").addEventListener("click", () => changePairs(1));
+
+const elementBoard = document.getElementById("board");
+
+updatePairs();
 addPlayer();
 
 function createPlayer() {
@@ -101,6 +112,20 @@ function renderPlayerListInSettings() {
 	settingsPlayers.style.height = `${offsetY}px`;
 }
 
+function changePairs(factor) {
+	const newPairs = pairs + factor;
+	
+	if (newPairs >= minPairs && newPairs <= maxPairs) {
+		pairs = newPairs;
+		
+		updatePairs();
+	}
+}
+
+function updatePairs() {
+	elementPairs.innerText = `${pairs} Kartenpaare`;
+}
+
 function setIngame(target) {
 	if (target !== ingame) {
 		document.body.classList.toggle("ingame");
@@ -113,5 +138,17 @@ function resetGame() {
 }
 
 function startGame() {
+	const cards = pairs * 2;
+	
+	const columns = Math.ceil(Math.sqrt(cards));
+	elementBoard.style.gridTemplateColumns = new Array(columns).fill("1fr").join(" ");
+	
+	elementBoard.innerHTML = "";
+	
+	for (let i = 0; i < cards; i++) {
+		const card = document.createElement("div");
+		elementBoard.appendChild(card);
+	}
+	
 	setIngame(true);
 }
