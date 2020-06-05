@@ -54,6 +54,7 @@ body.ingame main {
 	top: 50%;
 	transform: translate(-50%, -50%);
 	
+	box-sizing: border-box;
 	background: white;
 	border-radius: 16px;
 	width: 500px;
@@ -159,7 +160,7 @@ input:focus {
 }
 
 #board {
-	width: 600px;
+	width: 800px;
 	max-width: 90%;
 	margin: 24px auto;
 	display: grid;
