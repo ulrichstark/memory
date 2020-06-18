@@ -270,8 +270,13 @@ input:focus {
     }
 }
 
-.card-slot.removed {
+.card-slot.removed,
+.card-slot.flipped {
     pointer-events: none;
+    animation: none;
+}
+
+.card-slot.removed {
     transform: scale(0.5);
     opacity: 0;
 }
