@@ -33,7 +33,8 @@ let players = [];
 let ingame = false;
 let pairs = 12;
 let secondsPassed = 0;
-let clockHandle;
+let activePlayer = 0;
+let clockHandle = 0;
 
 const settingsPlayers = document.getElementById("settings-players");
 const settingsAddPlayer = document.getElementById("settings-add-player");
@@ -272,6 +273,14 @@ function createPlayerList() {
             playerSmileys.innerText = smileyText;
         };
 
+        player.updateActiveStatus = (active) => {
+            if (active) {
+                playerListItem.classList.add("active");
+            } else {
+                playerListItem.classList.remove("active");
+            }
+        };
+
         player.updateSmileys();
 
         playerListItem.appendChild(playerName);
@@ -294,6 +303,22 @@ function createSmileyPool(pairs) {
     return pool;
 }
 
+function updateActivePlayer() {
+    for (let i = 0; i < players.length; i++) {
+        players[i].updateActiveStatus(i === activePlayer);
+    }
+}
+
+function nextPlayer() {
+    activePlayer++;
+
+    if (activePlayer >= players.length) {
+        activePlayer = 0;
+    }
+
+    updateActivePlayer();
+}
+
 function startGame() {
     if (players.length === 0) {
         // Spiel mit 0 Spielern macht keinen Sinn
@@ -302,6 +327,9 @@ function startGame() {
 
     preparePlayersForGame();
     createPlayerList();
+
+    activePlayer = 0;
+    updateActivePlayer();
 
     const smileyPool = createSmileyPool(pairs);
     const cards = pairs * 2;
@@ -321,6 +349,7 @@ function startGame() {
         cardSlot.addEventListener("click", () => {
             cardSlot.classList.remove("clickable");
             cardSlot.classList.add("flipped");
+            nextPlayer();
         });
     }
 
