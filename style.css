@@ -94,9 +94,11 @@ button {
     border-radius: 8px;
 }
 
-button:hover {
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
-    transform: scale(1.1);
+@media (pointer: fine) {
+    button:hover {
+        box-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+        transform: scale(1.1);
+    }
 }
 
 button:active {
