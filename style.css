@@ -39,7 +39,7 @@ main,
 }
 
 main {
-    padding: 24px;
+    padding: 24px 0;
     box-sizing: border-box;
     transform: translateY(100%);
     overflow-y: auto;
@@ -150,19 +150,23 @@ input:focus {
     border-color: #59f;
 }
 
-#start-game {
-    align-self: flex-end;
-    margin-top: 48px;
-}
-
 #start-game,
 #reset-game {
     background-color: #57f;
 }
 
+#start-game {
+    align-self: flex-end;
+    margin-top: 48px;
+}
+
+#reset-game {
+    margin-left: 24px;
+}
+
 #game {
     display: flex;
-    padding: 24px 0;
+    padding: 24px;
     justify-content: space-evenly;
 }
 
@@ -267,11 +271,11 @@ input:focus {
     justify-content: center;
     background-color: white;
     user-select: none;
-    font-size: 6vmin;
 }
 
 @media (max-width: 900px) {
     #game {
+        padding: 24px 0;
         flex-flow: column;
     }
 
@@ -292,10 +296,18 @@ input:focus {
     #board {
         grid-gap: 16px;
     }
+
+    .card-back {
+        background-size: 25%;
+    }
 }
 
 @media (max-width: 500px) {
     #board {
         grid-gap: 8px;
+    }
+
+    .card-back {
+        background-size: 50%;
     }
 }

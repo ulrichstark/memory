@@ -52,8 +52,6 @@ const elementBoard = document.getElementById("board");
 updatePairs();
 addPlayer(false);
 addPlayer(false);
-addPlayer(false);
-addPlayer(false);
 
 function createPlayerRemoveButton() {
     const settingsRemove = document.createElement("button");
@@ -286,6 +284,7 @@ function startGame() {
     const columns = Math.ceil(Math.sqrt(cards)); // Formel für möglichst quadratisches Spielfeld
 
     elementBoard.style.gridTemplateColumns = new Array(columns).fill("1fr").join(" "); // Jede Spalte bekommt eine 'fraction' im CSS Grid
+    elementBoard.style.fontSize = `${Math.ceil(40 / columns)}vmin`;
 
     clearBoard();
 
