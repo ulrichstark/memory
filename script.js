@@ -143,8 +143,11 @@ function renderPlayerListInSettings() {
     for (const player of players) {
         player.elementSettings.style.top = `${offsetY}px`;
         player.inputName.placeholder = getPlayerNameWithIndex(index);
-        offsetY += 50;
-        index++;
+
+        if (index < maxPlayerCount) {
+            offsetY += 50;
+            index++;
+        }
     }
 
     settingsPlayers.style.height = `${offsetY}px`;

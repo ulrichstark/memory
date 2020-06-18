@@ -12,7 +12,8 @@ body {
 }
 
 h1 {
-    margin: 0.5em 0;
+    margin-top: 0;
+    margin-bottom: 0.5em;
     letter-spacing: 2px;
 }
 
@@ -132,7 +133,7 @@ button.round {
 }
 
 #settings-pairs {
-    margin-top: 24px;
+    margin-top: 36px;
     display: flex;
     align-items: center;
 }
@@ -157,7 +158,7 @@ input:focus {
 
 #start-game {
     align-self: flex-end;
-    margin-top: 48px;
+    margin-top: 36px;
 }
 
 #reset-game {
