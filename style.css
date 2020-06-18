@@ -179,6 +179,7 @@ input:focus {
 
 #time {
     margin-left: 2px;
+    letter-spacing: 1px;
 }
 
 #game {
@@ -229,6 +230,7 @@ input:focus {
 
 .player-smileys {
     color: #666;
+    margin-top: 8px;
 }
 
 #board {
@@ -242,10 +244,9 @@ input:focus {
     padding-bottom: 100%;
     position: relative;
     perspective: 600px;
-}
-
-.card-slot.clickable {
     cursor: pointer;
+    transition-property: transform, opacity;
+    transition-duration: 0.4s;
 }
 
 @keyframes focusedCard {
@@ -260,11 +261,24 @@ input:focus {
     }
 }
 
-.card-slot.clickable:hover {
-    animation-name: focusedCard;
-    animation-duration: 0.8s;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
+@media (pointer: fine) {
+    .card-slot:hover {
+        animation-name: focusedCard;
+        animation-duration: 0.8s;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+    }
+}
+
+.card-slot.removed,
+.card-slot.flipped {
+    pointer-events: none;
+    animation: none;
+}
+
+.card-slot.removed {
+    transform: scale(0.5);
+    opacity: 0;
 }
 
 .card-slot div {

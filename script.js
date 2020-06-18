@@ -5,7 +5,7 @@ const smileys = [
     "😀",
     "😂",
     "🤣",
-    "😃",
+    "😴",
     "😅",
     "😆",
     "😉",
@@ -35,6 +35,7 @@ let pairs = 12;
 let secondsPassed = 0;
 let activePlayer = 0;
 let clockHandle = 0;
+let lastCard = null;
 
 const settingsPlayers = document.getElementById("settings-players");
 const settingsAddPlayer = document.getElementById("settings-add-player");
@@ -197,19 +198,6 @@ function createDiv(className, parentElement) {
     return element;
 }
 
-function createCardSlot(elementBoard, smiley) {
-    const cardSlot = createDiv("card-slot", elementBoard);
-
-    const card = createDiv("card", cardSlot);
-
-    const cardFront = createDiv("card-front", card);
-    const cardBack = createDiv("card-back", card);
-
-    cardFront.innerText = smiley;
-
-    return cardSlot;
-}
-
 function updateClock() {
     secondsPassed++;
     const minutes = Math.floor(secondsPassed / 60);
@@ -269,7 +257,7 @@ function createPlayerList() {
         playerName.innerText = player.name;
 
         player.updateSmileys = () => {
-            const smileyText = player.smileys.length === 0 ? "-" : player.smileys.join(" ");
+            const smileyText = player.smileys.length === 0 ? "-" : player.smileys.join("");
             playerSmileys.innerText = smileyText;
         };
 
@@ -319,11 +307,35 @@ function nextPlayer() {
     updateActivePlayer();
 }
 
+function setBoardClickable(clickable) {
+    elementBoard.style.pointerEvents = clickable ? "auto" : "none";
+}
+
+function resolveCardPair(card) {
+    if (lastCard.smiley === card.smiley) {
+        lastCard.remove();
+        card.remove();
+
+        const player = players[activePlayer];
+        player.smileys.push(card.smiley);
+        player.updateSmileys();
+    } else {
+        lastCard.flip();
+        card.flip();
+        nextPlayer();
+    }
+
+    setBoardClickable(true);
+    lastCard = null;
+}
+
 function startGame() {
     if (players.length === 0) {
         // Spiel mit 0 Spielern macht keinen Sinn
         return;
     }
+
+    lastCard = null;
 
     preparePlayersForGame();
     createPlayerList();
@@ -332,24 +344,39 @@ function startGame() {
     updateActivePlayer();
 
     const smileyPool = createSmileyPool(pairs);
-    const cards = pairs * 2;
-    const columns = Math.ceil(Math.sqrt(cards)); // Formel für möglichst quadratisches Spielfeld
+    const cardCount = pairs * 2;
+    const columns = Math.ceil(Math.sqrt(cardCount)); // Formel für möglichst quadratisches Spielfeld
 
     elementBoard.style.gridTemplateColumns = new Array(columns).fill("1fr").join(" "); // Jede Spalte bekommt eine 'fraction' im CSS Grid
     elementBoard.style.fontSize = `${Math.ceil(40 / columns)}vmin`;
 
     clearBoard();
 
-    for (let i = 0; i < cards; i++) {
+    for (let i = 0; i < cardCount; i++) {
         const smiley = removeRandomItemFromArray(smileyPool); // Ein zufälligen Smiley aus dem Pool auswählen
 
-        const cardSlot = createCardSlot(elementBoard, smiley);
-        cardSlot.classList.add("clickable");
+        const elementSlot = createDiv("card-slot", elementBoard);
+        const elementCard = createDiv("card", elementSlot);
 
-        cardSlot.addEventListener("click", () => {
-            cardSlot.classList.remove("clickable");
-            cardSlot.classList.add("flipped");
-            nextPlayer();
+        const card = {
+            smiley: smiley,
+        };
+
+        createDiv("card-front", elementCard).innerText = smiley;
+        createDiv("card-back", elementCard);
+
+        card.flip = () => elementSlot.classList.toggle("flipped");
+        card.remove = () => elementSlot.classList.add("removed");
+
+        elementSlot.addEventListener("click", () => {
+            card.flip();
+
+            if (lastCard === null) {
+                lastCard = card;
+            } else {
+                setBoardClickable(false);
+                setTimeout(() => resolveCardPair(card), 2000);
+            }
         });
     }
 
