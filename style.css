@@ -64,6 +64,7 @@ body.ingame main {
     border-radius: 16px;
     width: 500px;
     max-width: 90%;
+    max-height: 90%;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
 
     display: flex;
@@ -159,10 +160,39 @@ input:focus {
     background-color: #57f;
 }
 
+#game {
+    display: flex;
+    padding: 24px 0;
+    justify-content: space-evenly;
+}
+
+#players {
+    padding-right: 36px;
+}
+
+.player {
+    padding: 8px 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    margin-top: 24px;
+    border-radius: 16px;
+    display: flex;
+    flex-flow: column;
+    min-width: 20vw;
+}
+
+.player-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.player-smileys {
+    color: #666;
+}
+
 #board {
     width: 800px;
     max-width: 90%;
-    margin: 24px auto;
     display: grid;
     grid-gap: 24px;
 }
@@ -238,6 +268,24 @@ input:focus {
     background-color: white;
     user-select: none;
     font-size: 6vmin;
+}
+
+@media (max-width: 900px) {
+    #game {
+        flex-flow: column;
+    }
+
+    #players {
+        padding: 32px;
+    }
+
+    .player {
+        min-width: 0;
+    }
+
+    #board {
+        margin: 0 auto;
+    }
 }
 
 @media (max-width: 800px) {
