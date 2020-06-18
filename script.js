@@ -95,7 +95,7 @@ function addPlayer() {
     // Listenelement nach sehr kurzer Zeit automatisch einblenden
     setTimeout(() => {
         player.elementSettings.classList.remove("hidden");
-    }, 20);
+    }, 100);
 
     // Spieler-Hinzufügen Knopf bei Limit ausblenden
     if (players.length >= maxPlayerCount) {
@@ -166,8 +166,6 @@ function setIngame(target) {
 }
 
 function resetGame() {
-    clearBoard();
-
     setIngame(false);
 }
 
@@ -200,6 +198,10 @@ function removeRandomItemFromArray(array) {
 }
 
 function startGame() {
+    if (players.length === 0) {
+        return;
+    }
+
     const cards = pairs * 2;
     const smileyPool = [];
 

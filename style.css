@@ -8,7 +8,7 @@ body {
     font-family: "Comic Sans MS", Verdana, Arial, sans-serif;
     font-size: 20px;
     background-color: #e0e0e0;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 h1 {
@@ -27,14 +27,22 @@ ul {
 }
 
 main,
-#settings-dialog-wrapper,
-#settings-dialog {
-    transition: all 1s;
+#settings-dialog-wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+main,
+#settings-dialog-wrapper {
+    transition: transform 1s;
 }
 
 main {
     padding: 24px;
-    transform: translateX(-100%);
+    box-sizing: border-box;
+    transform: translateY(100%);
+    overflow-y: auto;
 }
 
 body.ingame main {
@@ -42,21 +50,15 @@ body.ingame main {
 }
 
 #settings-dialog-wrapper {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 0;
     z-index: 10;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: #aaa;
+    box-shadow: inset 0 -16px 12px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 #settings-dialog {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-
     box-sizing: border-box;
     background: white;
     border-radius: 16px;
@@ -71,14 +73,8 @@ body.ingame main {
     padding: 24px;
 }
 
-body.ingame #settings-dialog {
-    top: 0;
-    transform: translate(-50%, -120%);
-}
-
 body.ingame #settings-dialog-wrapper {
-    background-color: transparent;
-    pointer-events: none;
+    transform: translateY(-100%);
 }
 
 button {
@@ -89,7 +85,8 @@ button {
     color: white;
     border: none;
     font-size: 1.2em;
-    transition: all 0.4s;
+    transition-property: transform, box-shadow;
+    transition-duration: 0.4s;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     padding: 8px 16px;
     border-radius: 8px;
@@ -128,7 +125,8 @@ button.round {
     position: absolute;
     height: 50px;
     width: 100%;
-    transition: all 0.4s;
+    transition-property: transform, top;
+    transition-duration: 0.4s;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -145,7 +143,7 @@ input {
     border-radius: 8px;
     outline: none;
     font-size: 1em;
-    transition: all 0.4s;
+    transition: border-color 0.4s;
     padding: 8px;
 }
 
