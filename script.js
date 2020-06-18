@@ -1,6 +1,33 @@
 const maxPlayerCount = 4;
 const minPairs = 5;
 const maxPairs = 25;
+const smileys = [
+    "😀",
+    "😂",
+    "🤣",
+    "😃",
+    "😅",
+    "😆",
+    "😉",
+    "😋",
+    "😎",
+    "😍",
+    "😘",
+    "🤔",
+    "🤨",
+    "😐",
+    "🙄",
+    "😮",
+    "😪",
+    "😜",
+    "🤑",
+    "😭",
+    "😬",
+    "😡",
+    "🤠",
+    "😇",
+    "🤫",
+];
 
 let players = [];
 let ingame = false;
@@ -127,6 +154,10 @@ function updatePairs() {
     elementPairs.innerText = `${pairs} Kartenpaare`;
 }
 
+function clearBoard() {
+    elementBoard.innerHTML = "";
+}
+
 function setIngame(target) {
     if (target !== ingame) {
         document.body.classList.toggle("ingame");
@@ -135,20 +166,64 @@ function setIngame(target) {
 }
 
 function resetGame() {
+    clearBoard();
+
     setIngame(false);
+}
+
+// Erstellt ein div-Element, vergibt ihm eine Klasse und fügt es 'parentElement' als Kind zu
+function createDiv(className, parentElement) {
+    const element = document.createElement("div");
+    element.classList.add(className);
+
+    parentElement.appendChild(element);
+
+    return element;
+}
+
+function createCardSlot(elementBoard, smiley) {
+    const cardSlot = createDiv("card-slot", elementBoard);
+
+    const card = createDiv("card", cardSlot);
+
+    const cardFront = createDiv("card-front", card);
+    const cardBack = createDiv("card-back", card);
+
+    cardFront.innerText = smiley;
+
+    return cardSlot;
+}
+
+function removeRandomItemFromArray(array) {
+    const index = Math.floor(Math.random() * array.length);
+    return array.splice(index, 1)[0];
 }
 
 function startGame() {
     const cards = pairs * 2;
+    const smileyPool = [];
+
+    for (let pair = 0; pair < pairs; pair++) {
+        const smiley = smileys[pair];
+        smileyPool.push(smiley);
+        smileyPool.push(smiley);
+    }
 
     const columns = Math.ceil(Math.sqrt(cards));
     elementBoard.style.gridTemplateColumns = new Array(columns).fill("1fr").join(" ");
 
-    elementBoard.innerHTML = "";
+    clearBoard();
 
     for (let i = 0; i < cards; i++) {
-        const card = document.createElement("div");
-        elementBoard.appendChild(card);
+        const smiley = removeRandomItemFromArray(smileyPool);
+
+        const cardSlot = createCardSlot(elementBoard, smiley);
+        cardSlot.classList.add("clickable");
+
+        cardSlot.addEventListener("click", () => {
+            cardSlot.classList.remove("clickable");
+            cardSlot.classList.add("flipped");
+        });
     }
 
     setIngame(true);
