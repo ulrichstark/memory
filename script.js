@@ -35,7 +35,7 @@ let pairs = 12;
 
 const settingsPlayers = document.getElementById("settings-players");
 const settingsAddPlayer = document.getElementById("settings-add-player");
-settingsAddPlayer.addEventListener("click", addPlayer);
+settingsAddPlayer.addEventListener("click", () => addPlayer(true));
 
 const resetGameButton = document.getElementById("reset-game");
 resetGameButton.addEventListener("click", resetGame);
@@ -51,14 +51,11 @@ document.getElementById("settings-add-pair").addEventListener("click", () => cha
 const elementBoard = document.getElementById("board");
 
 updatePairs();
-addPlayer();
+addPlayer(false);
 
 function createPlayer() {
     const elementSettings = document.createElement("li");
     elementSettings.classList.add("settings-player");
-
-    // Listenelement standardmäßig ausgeblendet
-    elementSettings.classList.add("hidden");
 
     const inputName = document.createElement("input");
 
@@ -81,7 +78,7 @@ function createPlayer() {
     return player;
 }
 
-function addPlayer() {
+function addPlayer(animate) {
     const player = createPlayer();
 
     players.push(player);
@@ -92,10 +89,13 @@ function addPlayer() {
     // Andere Listenelemente neu positionieren
     renderPlayerListInSettings();
 
-    // Listenelement nach sehr kurzer Zeit automatisch einblenden
-    setTimeout(() => {
-        player.elementSettings.classList.remove("hidden");
-    }, 100);
+    if (animate) {
+        // Listenelement anfangs ausblenden
+        player.elementSettings.classList.add("hidden");
+
+        // Listenelement nach kurzer Zeit automatisch einblenden
+        setTimeout(() => player.elementSettings.classList.remove("hidden"), 50);
+    }
 
     // Spieler-Hinzufügen Knopf bei Limit ausblenden
     if (players.length >= maxPlayerCount) {
