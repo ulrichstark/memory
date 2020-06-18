@@ -32,6 +32,8 @@ const smileys = [
 let players = [];
 let ingame = false;
 let pairs = 12;
+let secondsPassed = 0;
+let clockHandle;
 
 const settingsPlayers = document.getElementById("settings-players");
 const settingsAddPlayer = document.getElementById("settings-add-player");
@@ -39,6 +41,7 @@ const elementPairs = document.getElementById("pairs");
 const resetGameButton = document.getElementById("reset-game");
 const startGameButton = document.getElementById("start-game");
 const elementPlayers = document.getElementById("players");
+const elementTime = document.getElementById("time");
 
 settingsAddPlayer.addEventListener("click", () => addPlayer(true));
 resetGameButton.addEventListener("click", () => resetGame());
@@ -179,6 +182,7 @@ function setIngame(target) {
 }
 
 function resetGame() {
+    stopClock();
     setIngame(false);
 }
 
@@ -203,6 +207,23 @@ function createCardSlot(elementBoard, smiley) {
     cardFront.innerText = smiley;
 
     return cardSlot;
+}
+
+function updateClock() {
+    secondsPassed++;
+    const minutes = Math.floor(secondsPassed / 60);
+    const seconds = secondsPassed % 60;
+    elementTime.innerText = `${minutes}:${seconds <= 9 ? "0" : ""}${seconds}`;
+}
+
+function startClock() {
+    secondsPassed = 0;
+    updateClock();
+    this.clockHandle = window.setInterval(updateClock, 1000);
+}
+
+function stopClock() {
+    window.clearInterval(this.clockHandle);
 }
 
 function removeRandomItemFromArray(array) {
@@ -303,5 +324,6 @@ function startGame() {
         });
     }
 
+    startClock();
     setIngame(true);
 }

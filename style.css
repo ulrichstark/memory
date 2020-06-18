@@ -161,8 +161,22 @@ input:focus {
     margin-top: 36px;
 }
 
-#reset-game {
-    margin-left: 24px;
+#game-header {
+    padding-left: 24px;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+}
+
+#clock {
+    width: 32px;
+    height: 32px;
+    margin-left: 32px;
+    fill: #666;
+}
+
+#time {
+    margin-left: 2px;
 }
 
 #game {
@@ -181,8 +195,9 @@ input:focus {
     margin-top: 24px;
     border-radius: 16px;
     display: flex;
-    flex-flow: column;
+    flex-direction: column;
     min-width: 20vw;
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 .player-name {
@@ -277,7 +292,7 @@ input:focus {
 @media (max-width: 900px) {
     #game {
         padding: 24px 0;
-        flex-flow: column;
+        flex-direction: column;
     }
 
     #players {
