@@ -163,6 +163,10 @@ input:focus {
     margin-top: 36px;
 }
 
+#reset-game {
+    margin-bottom: 16px;
+}
+
 #game-header {
     padding-left: 24px;
     display: flex;
@@ -182,9 +186,14 @@ input:focus {
     letter-spacing: 1px;
 }
 
+#tries {
+    color: #666;
+    margin-left: 24px;
+}
+
 #game {
     display: flex;
-    padding: 24px;
+    padding: 0 24px;
     justify-content: space-evenly;
 }
 
@@ -228,9 +237,13 @@ input:focus {
     letter-spacing: 0.5px;
 }
 
+.player-tries {
+    color: #666;
+}
+
 .player-smileys {
     color: #666;
-    margin-top: 8px;
+    margin: 8px 0;
 }
 
 #board {
@@ -245,8 +258,7 @@ input:focus {
     position: relative;
     perspective: 600px;
     cursor: pointer;
-    transition-property: transform, opacity;
-    transition-duration: 0.4s;
+    transition: opacity 0.4s;
 }
 
 @keyframes focusedCard {
@@ -270,15 +282,14 @@ input:focus {
     }
 }
 
-.card-slot.removed,
+.card-slot.found,
 .card-slot.flipped {
     pointer-events: none;
     animation: none;
 }
 
-.card-slot.removed {
-    transform: scale(0.5);
-    opacity: 0;
+.card-slot.found {
+    opacity: 0.5;
 }
 
 .card-slot div {
@@ -325,7 +336,7 @@ input:focus {
 
 @media (max-width: 900px) {
     #game {
-        padding: 24px 0;
+        padding: 0;
         flex-direction: column;
     }
 

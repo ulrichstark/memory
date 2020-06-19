@@ -44,6 +44,7 @@ const resetGameButton = document.getElementById("reset-game");
 const startGameButton = document.getElementById("start-game");
 const elementPlayers = document.getElementById("players");
 const elementTime = document.getElementById("time");
+const elementTries = document.getElementById("tries");
 
 settingsAddPlayer.addEventListener("click", () => addPlayer(true));
 resetGameButton.addEventListener("click", () => resetGame());
@@ -66,6 +67,20 @@ function createPlayerRemoveButton() {
         '<svg viewBox="0 0 24 24" width="24px" height="24px"><path d="M14,8c0-2.21-1.79-4-4-4S6,5.79,6,8s1.79,4,4,4S14,10.21,14,8z M17,10v2h6v-2H17z M2,18v2h16v-2c0-2.66-5.33-4-8-4 S2,15.34,2,18z"/></svg>';
 
     return settingsRemove;
+}
+
+function formatTries(tries) {
+    return `${tries} Versuch${tries === 1 ? "" : "e"}`;
+}
+
+function updateTries() {
+    let totalTries = 0;
+
+    for (const player of players) {
+        totalTries += player.tries;
+    }
+
+    elementTries.innerText = formatTries(totalTries);
 }
 
 function createPlayer() {
@@ -229,6 +244,7 @@ function preparePlayersForGame() {
 
     for (const player of players) {
         player.smileys = [];
+        player.tries = 0;
 
         const inputValue = player.inputName.value.trim();
         if (inputValue.length > 0) {
@@ -251,6 +267,9 @@ function createPlayerList() {
         const playerName = document.createElement("span");
         playerName.classList.add("player-name");
 
+        const playerTries = document.createElement("span");
+        playerTries.classList.add("player-tries");
+
         const playerSmileys = document.createElement("span");
         playerSmileys.classList.add("player-smileys");
 
@@ -261,6 +280,8 @@ function createPlayerList() {
             playerSmileys.innerText = smileyText;
         };
 
+        player.updateTries = () => (playerTries.innerText = formatTries(player.tries));
+
         player.updateActiveStatus = (active) => {
             if (active) {
                 playerListItem.classList.add("active");
@@ -270,8 +291,10 @@ function createPlayerList() {
         };
 
         player.updateSmileys();
+        player.updateTries();
 
         playerListItem.appendChild(playerName);
+        playerListItem.appendChild(playerTries);
         playerListItem.appendChild(playerSmileys);
 
         elementPlayers.appendChild(playerListItem);
@@ -312,11 +335,15 @@ function setBoardClickable(clickable) {
 }
 
 function resolveCardPair(card) {
-    if (lastCard.smiley === card.smiley) {
-        lastCard.remove();
-        card.remove();
+    const player = players[activePlayer];
+    player.tries++;
+    player.updateTries();
+    updateTries();
 
-        const player = players[activePlayer];
+    if (lastCard.smiley === card.smiley) {
+        lastCard.found();
+        card.found();
+
         player.smileys.push(card.smiley);
         player.updateSmileys();
     } else {
@@ -339,6 +366,7 @@ function startGame() {
 
     preparePlayersForGame();
     createPlayerList();
+    updateTries();
 
     activePlayer = 0;
     updateActivePlayer();
@@ -366,7 +394,7 @@ function startGame() {
         createDiv("card-back", elementCard);
 
         card.flip = () => elementSlot.classList.toggle("flipped");
-        card.remove = () => elementSlot.classList.add("removed");
+        card.found = () => elementSlot.classList.add("found");
 
         elementSlot.addEventListener("click", () => {
             card.flip();
@@ -375,7 +403,7 @@ function startGame() {
                 lastCard = card;
             } else {
                 setBoardClickable(false);
-                setTimeout(() => resolveCardPair(card), 2000);
+                setTimeout(() => resolveCardPair(card), 1500);
             }
         });
     }
