@@ -11,6 +11,12 @@ body {
     overflow: hidden;
 }
 
+noscript {
+    text-align: center;
+    color: red;
+    font-size: 1.5em;
+}
+
 h1 {
     margin-top: 0;
     margin-bottom: 0.5em;
