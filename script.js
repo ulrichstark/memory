@@ -32,7 +32,7 @@ const smileys = [
 let players = [];
 let ingame = false;
 let pairs = 12;
-let secondsPassed = 0;
+let gameStartTime = 0;
 let activePlayer = 0;
 let clockHandle = 0;
 let lastCard = null;
@@ -216,14 +216,15 @@ function createDiv(className, parentElement) {
 }
 
 function updateClock() {
-    secondsPassed++;
+    const difference = Date.now() - gameStartTime;
+    const secondsPassed = Math.floor(difference / 1000);
     const minutes = Math.floor(secondsPassed / 60);
     const seconds = secondsPassed % 60;
     elementTime.innerText = `${minutes}:${seconds <= 9 ? "0" : ""}${seconds}`;
 }
 
 function startClock() {
-    secondsPassed = 0;
+    gameStartTime = Date.now();
     updateClock();
     this.clockHandle = window.setInterval(updateClock, 1000);
 }
@@ -376,6 +377,7 @@ function resolveCardPair(card) {
             activePlayer = null;
             updateActivePlayer();
 
+            stopClock();
             updateWinners();
         }
     } else {
