@@ -1,6 +1,6 @@
-const maxPlayerCount = 4;
-const minPairs = 5;
-const maxPairs = 25;
+const maxPlayerCount = 4; // Maximale Anzahl der zugelassenen Spieler
+const minPairs = 5; // Minimale Anzahl der zugelassenen Kartenpaare
+const maxPairs = 25; // Maximale Anzahl der zugelassenen Kartenpaare
 const smileys = [
     "😀",
     "😂",
@@ -29,14 +29,14 @@ const smileys = [
     "🤫",
 ];
 
-let players = [];
-let ingame = false;
-let pairs = 12;
-let gameStartTime = 0;
-let activePlayer = 0;
-let clockHandle = 0;
-let lastCard = null;
-let foundPairs = 0;
+let players = []; // Verwaltung aller Spieler
+let ingame = false; // Ist Benutzer gerade im Spiel?
+let pairs = 12; // Derzeite Auswahl, mit wievielen Paaren gespielt wird
+let gameStartTime = 0; // Zeitpunkt des Spielstartes
+let activePlayer = 0; // Index des aktiven Spielers
+let clockHandle = 0; // Handle für setInterval der Uhr, um dieses Intervall auch wieder zu beenden
+let lastCard = null; // Zwischenspeicher für umgedrehte Karte
+let foundPairs = 0; // Zähler für gefundene Paare
 
 const settingsPlayers = document.getElementById("settings-players");
 const settingsAddPlayer = document.getElementById("settings-add-player");
@@ -60,6 +60,7 @@ updatePairs();
 addPlayer(false);
 addPlayer(false);
 
+// Erstellt kleinen roten Spieler-Entfernen Knopf
 function createPlayerRemoveButton() {
     const settingsRemove = document.createElement("button");
     settingsRemove.classList.add("round");
@@ -71,10 +72,12 @@ function createPlayerRemoveButton() {
     return settingsRemove;
 }
 
+// Anzahl der Versuche in menschen-lesbares Format bringen
 function formatTries(tries) {
     return `${tries} Versuch${tries === 1 ? "" : "e"}`;
 }
 
+// Summe aller Versuche berechnen und formatiert ausgeben
 function updateTries() {
     let totalTries = 0;
 
@@ -85,6 +88,7 @@ function updateTries() {
     elementTries.innerText = formatTries(totalTries);
 }
 
+// Erstellt einen Spieler mit Eintrag für den Konfigurationsdialog
 function createPlayer() {
     const elementSettings = document.createElement("li");
     elementSettings.classList.add("settings-player");
@@ -105,6 +109,7 @@ function createPlayer() {
     return player;
 }
 
+// Fügt einen Spielereintrag der Liste im Konfigurationsdialog zu. Optional mit Animation
 function addPlayer(animate) {
     const player = createPlayer();
 
@@ -153,11 +158,12 @@ function removePlayer(player) {
     settingsAddPlayer.classList.remove("hidden");
 }
 
+// Konvertierung von Spieler-Index in Standardname
 function getPlayerNameWithIndex(playerIndex) {
     return `Spieler ${playerIndex}`;
 }
 
-// Passt Placeholder für Spielername-Eingabefelder und ihre Position an
+// Passt Platzhalter für Spielername-Eingabefelder und die Position des Eingabefeldes an
 function renderPlayerListInSettings() {
     let index = 1;
     let offsetY = 0;
@@ -175,6 +181,7 @@ function renderPlayerListInSettings() {
     settingsPlayers.style.height = `${offsetY}px`;
 }
 
+// Ändern der Anzahl der Paare um den 'factor' unter Beachtung des Bereichs
 function changePairs(factor) {
     const newPairs = pairs + factor;
 
@@ -185,14 +192,12 @@ function changePairs(factor) {
     }
 }
 
+// Ausgabe der derzeit konfigurierten Paare
 function updatePairs() {
     elementPairs.innerText = `${pairs} Kartenpaare`;
 }
 
-function clearBoard() {
-    elementBoard.innerHTML = "";
-}
-
+// Ändern des Status, ob im Spiel oder nicht
 function setIngame(target) {
     if (target !== ingame) {
         document.body.classList.toggle("ingame");
@@ -200,6 +205,7 @@ function setIngame(target) {
     }
 }
 
+// Beenden des Spieles und Zurückkehren zum Konfigurationsdialog
 function resetGame() {
     stopClock();
     setIngame(false);
@@ -215,6 +221,7 @@ function createDiv(className, parentElement) {
     return element;
 }
 
+// Differenz zwischen aktueller Zeit und Spielbeginn wird berechnet, formatiert und ausgegeben
 function updateClock() {
     const difference = Date.now() - gameStartTime;
     const secondsPassed = Math.floor(difference / 1000);
@@ -223,24 +230,29 @@ function updateClock() {
     elementTime.innerText = `${minutes}:${seconds <= 9 ? "0" : ""}${seconds}`;
 }
 
+// Aktuelle Zeit wird als Spielbeginn gespeichert, Uhrausgabe aktualisiert und für jede Sekunde als weiteren Aufruf geplant
 function startClock() {
     gameStartTime = Date.now();
     updateClock();
     this.clockHandle = window.setInterval(updateClock, 1000);
 }
 
+// Interval für Uhraktualierung wird beendet
 function stopClock() {
     window.clearInterval(this.clockHandle);
 }
 
+// *Name der Methode auf Deutsch*
 function removeRandomItemFromArray(array) {
     const index = Math.floor(Math.random() * array.length);
     return array.splice(index, 1)[0];
 }
 
 /*
-    - Setzt Namen oder nutzt die Platzhalternamen
-    - Setzt gefundende Smileys für jeden Spieler zurück
+    Bereitet alle Spielereinträge für das Spiel vor, indem für jeden Spieler:
+      - seine gefundenen Smileys zurückgesetzt werden
+      - seine Versuche zurückgesetzt werden
+      - sein Name aus dem Eingabefeld genommen wird, oder wenn leer, ein Standardname vergeben wird
 */
 function preparePlayersForGame() {
     let playerIndex = 1;
@@ -260,8 +272,9 @@ function preparePlayersForGame() {
     }
 }
 
+// Liste der Spieler im Spiel wird zusammengebaut und jedem Spieler Methode beigefügt, die für den Ablauf des Spieles notwending sind
 function createPlayerList() {
-    elementPlayers.innerHTML = "";
+    elementPlayers.innerHTML = ""; // Liste der Spieler wird geleert
 
     for (const player of players) {
         const playerListItem = document.createElement("li");
@@ -281,13 +294,16 @@ function createPlayerList() {
 
         playerName.innerText = player.name;
 
+        // Methode, um gefundene Smileys mit der Ausgabe zu synchronisieren
         player.updateSmileys = () => {
             const smileyText = player.smileys.length === 0 ? "-" : `${player.smileys.length} ${player.smileys.join("")}`;
             playerSmileys.innerText = smileyText;
         };
 
+        // Methode, um Versuche mit der Ausgabe zu synchronisieren
         player.updateTries = () => (playerTries.innerText = formatTries(player.tries));
 
+        // Methode, um Anzeige zu aktualieren, ob dieser Spieler gerade dran ist
         player.updateActiveStatus = (active) => {
             if (active) {
                 playerListItem.classList.add("active");
@@ -296,6 +312,7 @@ function createPlayerList() {
             }
         };
 
+        // Diesen Spieler visuell als Gewinner markieren
         player.setWinner = () => playerListItem.classList.add("won");
 
         player.updateSmileys();
@@ -322,12 +339,15 @@ function createSmileyPool(pairs) {
     return pool;
 }
 
+// Alle Spieler visuell an die Variable 'activePlayer' anpassen
 function updateActivePlayer() {
     for (let i = 0; i < players.length; i++) {
         players[i].updateActiveStatus(i === activePlayer);
     }
 }
 
+// Den nächsten Spieler als aktiven Spieler setzen,
+// möglicherweise auf den ersten Spieler umschalten und danach die Ausgabe anpassen
 function nextPlayer() {
     activePlayer++;
 
@@ -338,10 +358,12 @@ function nextPlayer() {
     updateActivePlayer();
 }
 
+// Steuert die Interaktivität des Spielfeldes
 function setBoardClickable(clickable) {
     elementBoard.style.pointerEvents = clickable ? "auto" : "none";
 }
 
+// Höchste Punktzahl rausfinden und jeden Spieler mit dieser Punktzahl als Gewinner markieren
 function updateWinners() {
     let highestScore = 0;
 
@@ -358,13 +380,15 @@ function updateWinners() {
     }
 }
 
+// Beziehung zwischen aktueller Karte (card) und zwischengespeicherter Karte (lastCard) auflösen
 function resolveCardPair(card) {
     const player = players[activePlayer];
-    player.tries++;
-    player.updateTries();
-    updateTries();
+    player.tries++; // Versuche um eins erhöhen
+    player.updateTries(); // Spieler-Versuchs-Anzeige synchronisieren
+    updateTries(); // Total-Versuchs-Anzeige synchronisieren
 
     if (lastCard.smiley === card.smiley) {
+        // Gleiches Symbold
         lastCard.found();
         card.found();
 
@@ -374,6 +398,7 @@ function resolveCardPair(card) {
         foundPairs++;
 
         if (foundPairs === pairs) {
+            // Alle Paare gefunden -> Spiel zu Ende
             activePlayer = null;
             updateActivePlayer();
 
@@ -381,12 +406,13 @@ function resolveCardPair(card) {
             updateWinners();
         }
     } else {
+        // Unterschiedliches Symbol
         lastCard.flip();
         card.flip();
         nextPlayer();
     }
 
-    setBoardClickable(true);
+    setBoardClickable(true); // Spielfeld wieder klickbar machen
     lastCard = null;
 }
 
@@ -403,7 +429,7 @@ function startGame() {
     createPlayerList();
     updateTries();
 
-    activePlayer = 0;
+    activePlayer = 0; // Erster Spieler fängt an
     updateActivePlayer();
 
     const smileyPool = createSmileyPool(pairs);
@@ -411,9 +437,9 @@ function startGame() {
     const columns = Math.ceil(Math.sqrt(cardCount)); // Formel für möglichst quadratisches Spielfeld
 
     elementBoard.style.gridTemplateColumns = new Array(columns).fill("1fr").join(" "); // Jede Spalte bekommt eine 'fraction' im CSS Grid
-    elementBoard.style.fontSize = `${Math.ceil(40 / columns)}vmin`;
+    elementBoard.style.fontSize = `${Math.ceil(40 / columns)}vmin`; // Dynamische Symbolgröße abhängig von Bildschirmgröße und Spaltenanzahl
 
-    clearBoard();
+    elementBoard.innerHTML = ""; // Spielfeld leeren
 
     for (let i = 0; i < cardCount; i++) {
         const smiley = removeRandomItemFromArray(smileyPool); // Ein zufälligen Smiley aus dem Pool auswählen
@@ -428,21 +454,22 @@ function startGame() {
         createDiv("card-front", elementCard).innerText = smiley;
         createDiv("card-back", elementCard);
 
-        card.flip = () => elementSlot.classList.toggle("flipped");
-        card.found = () => elementSlot.classList.add("found");
+        card.flip = () => elementSlot.classList.toggle("flipped"); // Umdreh-Status der Karte ändern
+        card.found = () => elementSlot.classList.add("found"); // Karte als gefunden visuell markieren
 
         elementSlot.addEventListener("click", () => {
             card.flip();
 
             if (lastCard === null) {
+                // Keine Karte derzeit umgedreht -> aktuelle Karte zwischenspeichern
                 lastCard = card;
             } else {
-                setBoardClickable(false);
-                setTimeout(() => resolveCardPair(card), 1500);
+                setBoardClickable(false); // Spielfeld nicht mehr klickbar machen
+                setTimeout(() => resolveCardPair(card), 2000); // Nach kurzer Zeit Beziehung der beiden Karten auflösen
             }
         });
     }
 
     startClock();
-    setIngame(true);
+    setIngame(true); // Animation zu Spielfeld starten
 }
